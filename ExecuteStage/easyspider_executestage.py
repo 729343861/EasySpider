@@ -2065,7 +2065,7 @@ class BrowserThread(Thread):
                                 'Element %s not found with parameter name %s when extracting data, use default, this error will only show once' % (
                                     relativeXPath, p["name"]))
                             self.print_and_log(
-                                "提取数据操作时，字段名 %s 对应XPath %s 未找到，使用默认值，本字段将不再重复报错" % (
+                                "提取数据操作时，字段名 %s 对应XPath %s 未找到，使用默认值，本字段将不再重复报错!" % (
                                     p["name"], relativeXPath))
                             self.dataNotFoundKeys[p["name"]] = True
                 except Exception as e:
@@ -2406,6 +2406,12 @@ if __name__ == '__main__':
             except:
                 browser = "chrome"
             if browser == "chrome":
+                options.add_argument("--disable-blink-features=AutomationControlled")
+                options.add_experimental_option("excludeSwitches", ["enable-automation"])
+                options.add_experimental_option('useAutomationExtension', False)
+                options.add_argument("user-agent=Mozilla/5.0 ... Chrome/114.0.0.0 Safari/537.36")
+                options.add_argument("--lang=en-US,en")
+                options.add_argument("window-size=1280,800")
                 if c.docker_driver == "":
                     print("Using local driver")
                     selenium_service = Service(executable_path=driver_path)
@@ -2417,6 +2423,13 @@ if __name__ == '__main__':
                     # options.add_argument("--headless")
                     # print("Headless mode")
                     browser_t = MyChrome(command_executor=c.docker_driver, options=options, mode='remote_driver')
+                    browser_t.execute_cdp_cmd("Page.addScriptToEvaluateOnNewDocument", {
+                        "source": """
+                            Object.defineProperty(navigator, 'webdriver', {
+                                get: () => undefined
+                            })
+                        """
+                    })
             elif browser == "edge":
                 from selenium.webdriver.edge.service import Service as EdgeService
                 from selenium.webdriver.edge.options import Options as EdgeOptions
