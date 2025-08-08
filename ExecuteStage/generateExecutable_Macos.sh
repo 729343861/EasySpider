@@ -1,7 +1,7 @@
 # 先打包一个不带ddddocr和pandas的版本，然后再打包一个带的版本，不带ddddocr和pandas的版本运行速度会快很多
 rm -r build
 rm -r dist
-pyinstaller -F --icon=favicon.ico easyspider_executestage.py --exclude-module ddddocr --exclude-module onnxruntime --exclude-module onnx --exclude-module onnxruntime_pybind11_state.so --exclude-module pillow --exclude-module pandas --exclude-module numpy --exclude-module scipy --exclude-module sklearn 
+pyinstaller -F --icon=favicon.ico easyspider_executestage.py --exclude-module ddddocr --exclude-module onnxruntime --exclude-module onnx  --exclude-module pillow --exclude-module pandas --exclude-module numpy --exclude-module scipy --exclude-module sklearn
 
 rm ../.temp_to_pub/EasySpider_MacOS/easyspider_executestage
 cp dist/easyspider_executestage ../.temp_to_pub/EasySpider_MacOS/easyspider_executestage
